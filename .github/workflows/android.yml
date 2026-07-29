@@ -2,23 +2,25 @@ name: Build APK
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  apk:
+    runs-on: ubuntu-22.04
+
+    container:
+      image: ghcr.io/kivy/buildozer:latest
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Build APK
-        uses: docker://kivy/buildozer:latest
-        with:
-          args: buildozer android debug
+        run: |
+          buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: apk
+          name: NotificationLogger
           path: bin/*.apk
